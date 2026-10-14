@@ -118,3 +118,10 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Smoke test TLS/Ed25519 FAILED con `SyntaxError: unexpected character after line continuation character`: escape `\\x27` en la invocación de `python -c`, no fallo demostrado de cryptography.
 - Corregido el comando usando el intérprete del virtualenv como entrypoint de Docker y comillas seguras para la cadena de prueba. Aún requiere nueva ejecución para validar.
 - Trivy SKIPPED en este run, por tanto último escaneo válido: 0 CRITICAL y 6 HIGH. Sin cambio a prd ni publicación de imágenes.
+
+## CI 38507022009 — recuperación validada
+- Todos los pasos SUCCESS: build Docker, pip check, versionado, smoke test TLS/X.509/Ed25519, diagnóstico de distribuciones y Trivy.
+- Trivy: 0 CRITICAL, 6 HIGH. Advertencia persistente: Unsupported os family=centos-stream.
+- Artefactos: awx-trivy-report ID 11867454804 y awx-python-installations ID 11867404835.
+- Configuración compatible restaurada: cryptography 46.0.5, pyOpenSSL 26.0.0; conflicto de MSAL con cryptography 50 registrado anteriormente.
+- Próximos pasos: gestionar hallazgos de setuptools vendorizado, Twisted y cryptography, validar AWX Operator y realizar pruebas integradas. No publicar ni promover a prd.
