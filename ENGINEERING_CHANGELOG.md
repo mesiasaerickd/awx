@@ -105,3 +105,10 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - CANDIDATO NO VALIDADO: esperar nuevo GitHub Actions y resultados Trivy. Compilación e importación no reemplazan pruebas reales de autenticación, certificados, credenciales, receptor, jobs y APIs.
 - Persisten los hallazgos por dependencias vendorizadas en setuptools y Twisted; investigar solución sin borrados manuales.
 - No modificar `prd`, no publicar imágenes ni desplegar Kubernetes hasta aprobación.
+
+## CI 38505724509 — bloqueo de actualización cryptography 50
+- Build FAILED durante resolución de dependencias: `msal==1.34.0` exige `cryptography>=2.5,<49`; prueba `cryptography==50.0.0` causa `ResolutionImpossible` (pip).
+- Etapas `pip check`, pruebas TLS/firmas y Trivy se omitieron porque falló el build. Sin nuevo reporte de vulnerabilidades.
+- Reversión de versiones candidatas a último conjunto que compiló: `cryptography==46.0.5`, `pyOpenSSL==26.0.0`, y restricciones equivalentes en `requirements.in`; verificación CI adaptada. Se conservaron las pruebas TLS y de firmas en el workflow para validar en la siguiente ejecución.
+- Riesgo residual: CVE de cryptography que requieren ramas 48/49/50 no resueltas. Evaluar actualización de MSAL y resto de dependencias de autenticación **separadamente**, con pruebas de regresión. No usar `--no-deps` ni ignorar el resolver.
+- Último estado Trivy confirmado sigue siendo 0 CRITICAL / 6 HIGH (run 38504713333), con advertencia `Unsupported os family=centos-stream`. `prd` sin modificaciones.
