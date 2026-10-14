@@ -1,0 +1,30 @@
+name: AWX development image build
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+    paths:
+      - '.github/workflows/awx-build.yml'
+      - 'requirements/**'
+      - 'tools/ansible/**'
+      - 'Makefile'
+permissions:
+  contents: read
+concurrency:
+  group: awx-dev-build
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dockerfile generator
+        run: python3 -m pip install --user ansible-core jinja2
+      - name: Generate image recipe from upstream
+        run: make Dockerfile HEADLESS=1
+      - name: Build development image without pushing
+        run: |
+          docker build --file Dockerfile --build-arg VERSION=24.6.1.dev0 --build-arg SETUPTOOLS_SCM_PRETEND_VERSION=24.6.1.dev0 --build-arg HEADLESS=true --tag awx-dev:ci .
+      - name: Record build image digest
+        run: docker image inspect awx-dev:ci --format '{{.Id}}'
