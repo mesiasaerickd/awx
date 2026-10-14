@@ -89,3 +89,11 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Se cambió cryptography de 46.0.3 a 46.0.5 en requirements.in y requirements.txt; el workflow comprobará la versión efectiva.
 - Estado: cambios candidatos SIN validar. Deben aprobar build, pip check, versiones, Trivy y pruebas funcionales antes de publicar o promover. Las vulnerabilidades que requieren cryptography 48/49/50 siguen pendientes.
 - Trivy no cubre completamente el OS CentOS Stream. Se mantiene prd sin cambios.
+
+## Validación CI 38504713333 — imagen AWX
+- Todos los steps completaron SUCCESS: build, pip check, verificación de versiones, inventario Python, Trivy y subida de artefactos.
+- Trivy: 0 CRITICAL, 6 HIGH; aviso persistente `Unsupported os family=centos-stream`. Los seis HIGH aún requieren revisión CVE por CVE.
+- Artefactos: `awx-python-installations` ID 11867945854; `awx-trivy-report` ID 11866744977.
+- cryptography 46.0.5 instalado y verificado; se redujo un hallazgo HIGH frente a 46.0.3.
+- Copias vendorizadas detectadas: `/var/lib/awx/venv/awx/lib/python3.12/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info` y `setuptools/_vendor/jaraco.context-5.3.0.dist-info`; el entorno AWX principal tiene wheel 0.46.3.
+- Prohibido eliminar manualmente los archivos vendorizados. Investigar actualización compatible de setuptools, revisar si las copias quedan incluidas en imagen final y evaluar dependencias afectadas. Sin publicación ni promoción a `prd`.
