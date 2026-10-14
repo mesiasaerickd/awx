@@ -50,3 +50,10 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - La CVE-2026-102268 ya no figura como crítica en el conteo; se necesita cotejo detallado del JSON para atribuir todas las diferencias de hallazgos.
 - Cobertura incompleta: Trivy muestra `Unsupported os family="centos-stream"`.
 - PENDIENTE: pruebas de autenticación/API, integración AWX-Operator-EE, revisión de hallazgos HIGH y examen de paquetes del sistema operativo. No publicar ni promover a `prd` todavía.
+
+## Remediación candidata de vulnerabilidades HIGH — 2026-10-13
+- Fuente: Trivy JSON artifact 11865160575, ejecución AWX 38498157470. 21 HIGH y 0 CRITICAL.
+- Se identificaron vulnerabilidades en Twisted, azure-core, cryptography, dynaconf, jaraco.context (dos ubicaciones/versiones), msgpack, protobuf, pyOpenSSL, pyasn1, urllib3 y wheel. El hallazgo de wheel apunta a 0.45.1 aunque el lock Python apunta a 0.46.3: revisar rutas y capas instaladas.
+- Candidatos de prueba en `requirements/requirements.txt`: dynaconf 3.2.13, msgpack 1.2.1, pyasn1 0.6.4, azure-core 1.38.0, jaraco-context 6.1.0, urllib3 2.8.0.
+- Cambios SIN validar todavía: resolver dependencias, compilación, pruebas funcionales/API y Trivy posterior. No tocar `prd` ni publicar la imagen.
+- Pendientes de análisis de compatibilidad: cryptography (saltos mayores), protobuf, pyOpenSSL, Twisted (versión corregida reportada como release candidate); además cobertura OS CentOS Stream no admitida por Trivy.
