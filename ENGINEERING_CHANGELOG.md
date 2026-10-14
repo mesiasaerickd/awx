@@ -62,3 +62,10 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - GitHub Actions: build SUCCESS; `pip check` inicial SUCCESS; validación de versiones FAILED; Trivy SKIPPED y sin artifact.
 - Error observado: `PackageNotFoundError: No package metadata was found for PyJWT`, porque el workflow usaba el Python del sistema (`python3.12`) y las dependencias AWX se instalan en `/var/lib/awx/venv/awx`.
 - Corrección: ejecutar `pip check` y validación de versiones usando `/var/lib/awx/venv/awx/bin/python` dentro de la imagen. Validación aún pendiente de nueva ejecución. `prd` sin cambios.
+
+## Resultado verificado — AWX CI 38501718152 (2026-10-13)
+- Compilación Docker, `pip check`, verificación de versiones, Trivy y upload del artifact: **SUCCESS**.
+- Informe `awx-trivy-report`, artifact **11865873282**, consultado: **CRITICAL=0, HIGH=9** (frente al lote anterior de 21 HIGH).
+- CVE pendientes: Twisted 25.5.0 / CVE-2026-42304 (Trivy indica 26.4.0rc2: pre-release; no actualizar sin probar); cryptography 46.0.3 / CVE-2026-26007 (46.0.5), CVE-2026-69247 (50.0.0), CVE-2026-69249 (49.0.0), GHSA-537c-gmf6-5ccf (48.0.1); jaraco.context 5.3.0 / CVE-2026-23949 (6.1.0) **en otra ubicación pese al pin 6.1.0**; protobuf 6.32.1 / CVE-2026-0994 (6.33.5); pyOpenSSL 25.3.0 / CVE-2026-27459 (26.0.0); wheel 0.45.1 / CVE-2026-24049 (0.46.2) **en otra ubicación pese al pin 0.46.3**.
+- Próximos pasos: localizar las capas/intérpretes afectados en el build multietapa, evaluar compatibilidad de actualizaciones mayores, verificar pruebas funcionales y de autenticación antes de publicar; reportar cobertura OS faltante (`centos-stream`).
+- No promover a `prd` ni publicar aún.
