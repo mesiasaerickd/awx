@@ -26,6 +26,12 @@ jobs:
       - name: Build development image without pushing
         run: |
           docker build --file Dockerfile --build-arg VERSION=24.6.1.dev0 --build-arg SETUPTOOLS_SCM_PRETEND_VERSION=24.6.1.dev0 --build-arg HEADLESS=true --tag awx-dev:ci .
+      - name: Check installed Python dependency consistency
+        run: |
+          docker run --rm --entrypoint /bin/bash awx-dev:ci -lc 'python3.12 -m pip check'
+      - name: Verify remediation candidate versions
+        run: |
+          docker run --rm --entrypoint /bin/bash awx-dev:ci -lc 'python3.12 -c "import importlib.metadata as m; targets={\"PyJWT\":\"2.14.0\",\"dynaconf\":\"3.2.13\",\"msgpack\":\"1.2.1\",\"pyasn1\":\"0.6.4\",\"azure-core\":\"1.38.0\",\"jaraco.context\":\"6.1.0\",\"urllib3\":\"2.8.0\"}; [(print(k, m.version(k)), (_ for _ in ()).throw(RuntimeError(k)) if m.version(k)!=v else None) for k,v in targets.items()] "'
       - name: Record build image digest
         run: docker image inspect awx-dev:ci --format '{{.Id}}'
 
