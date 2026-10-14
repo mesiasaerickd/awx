@@ -42,3 +42,11 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Advertencia: esta actualización es una **candidata**, todavía no se ha comprobado disponibilidad del paquete, resolución del resto de dependencias, build, pruebas de JWT/autenticación, compatibilidad de AWX, ni escaneo de la nueva imagen.
 - Aceptación: compilar correctamente en GitHub Actions, verificar la versión efectiva de PyJWT, comprobar que desaparece la CVE, ejecutar pruebas de autenticación/API y someter cambio a PR; prohibida la promoción a `prd` hasta entonces.
 - La base de CentOS Stream 9 sigue sin cobertura de CVE del sistema operativo en Trivy, por lo que un escaneo limpio en Python no constituye aprobación de seguridad.
+
+## Verificación corrección PyJWT — GitHub Actions 38498157470
+- Job build 115639674023: **SUCCESS**. Instalación observada en logs: `pyjwt-2.14.0`.
+- Escaneo Trivy 0.75.0: **CRITICAL=0, HIGH=21**; comparativa inicial 6 CRITICAL / 76 HIGH y previa de desarrollo 1 CRITICAL / 25 HIGH.
+- Artifact de informe `awx-trivy-report`, ID 11865160575.
+- La CVE-2026-102268 ya no figura como crítica en el conteo; se necesita cotejo detallado del JSON para atribuir todas las diferencias de hallazgos.
+- Cobertura incompleta: Trivy muestra `Unsupported os family="centos-stream"`.
+- PENDIENTE: pruebas de autenticación/API, integración AWX-Operator-EE, revisión de hallazgos HIGH y examen de paquetes del sistema operativo. No publicar ni promover a `prd` todavía.
