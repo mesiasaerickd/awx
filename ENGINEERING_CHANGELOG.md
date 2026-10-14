@@ -139,3 +139,11 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Cuatro HIGH restantes confirmados en JSON: Twisted 25.5.0 CVE-2026-42304 (fix 26.4.0rc2); cryptography 46.0.5 CVE-2026-69247 (fix 50.0.0), CVE-2026-69249 (fix 49.0.0), GHSA-537c-gmf6-5ccf (fix 48.0.1).
 - cryptography 50.0.0 previamente falló por msal 1.34.0 (requiere cryptography <49); plan: estudiar compatibilidad de upgrade coordinado de MSAL, pyOpenSSL y cryptography, y regresiones de autenticación. Twisted requiere evaluar release candidate y estabilidad.
 - Advertencia Trivy: Unsupported os family=centos-stream. Esta evidencia no aprueba ni garantiza seguridad de producción. prd, GHCR y Kubernetes sin cambios.
+
+## Candidato conjunto para los cuatro HIGH restantes — 2026-10-13
+- Baseline verificado: GitHub Actions 38507430392: 0 CRITICAL / 4 HIGH, con advertencia Trivy `Unsupported os family=centos-stream`.
+- Dependencias candidatas en rama `dev`: MSAL 1.34.0 -> 1.39.0, cryptography 46.0.5 -> 50.0.0, pyOpenSSL 26.0.0 -> 26.4.0 y Twisted 25.5.0 -> 26.4.0 (estable).
+- Motivo: MSAL 1.34.0 bloqueó cryptography 50 en la prueba anterior; MSAL 1.39 y pyOpenSSL 26.4 amplían compatibilidad con versiones cryptography 50; Twisted 26.4.0 es publicación estable posterior a la candidata mencionada en Trivy.
+- Se actualizó el lock de Python, límites de requirements.in y verificación de versiones efectivas en CI. Se mantienen pip check, smoke TLS/X509/Ed25519, diagnóstico de paquetes y escaneo Trivy.
+- ESTADO: no validado, sujeto a resultado de GitHub Actions. Si hay fallo de resolución o incompatibilidad, identificar dependencia bloqueante y revertir candidato, no ignorar pip. La ausencia de HIGH/CRITICAL en este escaneo no constituye garantía de seguridad o funcionalidad.
+- Imprescindible posteriormente: pruebas de autenticación MSAL/OAuth, certificados, API, ejecución de jobs, integración Operator+EE y evaluación OS CentOS Stream. Sin publicar GHCR ni modificar prd o Kubernetes.
