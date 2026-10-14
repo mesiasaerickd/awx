@@ -83,3 +83,9 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - `jaraco.context` 5.3.0 y `wheel` 0.45.1 coexisten con versiones corregidas declaradas por el lock en otros entornos/capas; identificar ubicaciones reales antes de intervenir.
 - WARNING persistente Trivy: `Unsupported os family=centos-stream`. Sin evaluación completa de vulnerabilidades OS.
 - Pendiente: priorizar actualización compatible de cryptography; mapear instalaciones antiguas y evaluar pruebas de autenticación/función. **No publicar ni promover a `prd`.**
+
+## Diagnóstico de capas y prueba de cryptography 46.0.5
+- Se añadió al workflow AWX un diagnóstico de solo lectura de versiones y ubicaciones *.dist-info de jaraco.context, wheel, cryptography y Twisted dentro de la imagen. Se guardará como artifact awx-python-installations.
+- Se cambió cryptography de 46.0.3 a 46.0.5 en requirements.in y requirements.txt; el workflow comprobará la versión efectiva.
+- Estado: cambios candidatos SIN validar. Deben aprobar build, pip check, versiones, Trivy y pruebas funcionales antes de publicar o promover. Las vulnerabilidades que requieren cryptography 48/49/50 siguen pendientes.
+- Trivy no cubre completamente el OS CentOS Stream. Se mantiene prd sin cambios.
