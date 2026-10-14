@@ -35,6 +35,25 @@ jobs:
       - name: Record build image digest
         run: docker image inspect awx-dev:ci --format '{{.Id}}'
 
+      - name: Locate installed copies of vulnerable Python packages
+        run: |
+          mkdir -p diagnostics
+          docker run --rm --entrypoint /bin/bash awx-dev:ci -c '
+            set -eu
+            echo "=== AWX virtualenv package versions ==="
+            /var/lib/awx/venv/awx/bin/python -m pip show cryptography twisted jaraco.context wheel || true
+            echo "=== Additional installed distributions in image ==="
+            find /usr /opt /var/lib/awx -type d \( -iname "jaraco.context-*.dist-info" -o -iname "wheel-*.dist-info" -o -iname "cryptography-*.dist-info" -o -iname "twisted-*.dist-info" \) -print 2>/dev/null || true
+          ' | tee diagnostics/python-installations.txt
+      - name: Save installed package locations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: awx-python-installations
+          path: diagnostics/python-installations.txt
+          if-no-files-found: warn
+          retention-days: 30
+
       - name: Scan built image with Trivy (read-only, no publishing)
         run: |
           mkdir -p trivy-reports
