@@ -97,3 +97,11 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - cryptography 46.0.5 instalado y verificado; se redujo un hallazgo HIGH frente a 46.0.3.
 - Copias vendorizadas detectadas: `/var/lib/awx/venv/awx/lib/python3.12/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info` y `setuptools/_vendor/jaraco.context-5.3.0.dist-info`; el entorno AWX principal tiene wheel 0.46.3.
 - Prohibido eliminar manualmente los archivos vendorizados. Investigar actualización compatible de setuptools, revisar si las copias quedan incluidas en imagen final y evaluar dependencias afectadas. Sin publicación ni promoción a `prd`.
+
+## Prueba controlada de cryptography 50 y pyOpenSSL 26.4 — 2026-10-13
+- En `dev` se aplicaron versiones candidatas: `cryptography==50.0.0` y `pyOpenSSL==26.4.0` en requirements.txt; límites correspondientes en requirements.in.
+- Motivo: el análisis previo mantenía 6 HIGH y varias CVE de cryptography solo se corrigen en ramas mayores. El changelog oficial de pyOpenSSL 26.4.0 indica soporte para cryptography 50.x; la actualización cambia APIs y requiere pruebas de regresión.
+- Workflow ampliado con comprobación de versiones, `pip check`, importación TLS/X509 y firma Ed25519 de prueba, previo a Trivy.
+- CANDIDATO NO VALIDADO: esperar nuevo GitHub Actions y resultados Trivy. Compilación e importación no reemplazan pruebas reales de autenticación, certificados, credenciales, receptor, jobs y APIs.
+- Persisten los hallazgos por dependencias vendorizadas en setuptools y Twisted; investigar solución sin borrados manuales.
+- No modificar `prd`, no publicar imágenes ni desplegar Kubernetes hasta aprobación.
