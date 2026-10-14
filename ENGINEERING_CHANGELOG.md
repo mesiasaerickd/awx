@@ -125,3 +125,9 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Artefactos: awx-trivy-report ID 11867454804 y awx-python-installations ID 11867404835.
 - Configuración compatible restaurada: cryptography 46.0.5, pyOpenSSL 26.0.0; conflicto de MSAL con cryptography 50 registrado anteriormente.
 - Próximos pasos: gestionar hallazgos de setuptools vendorizado, Twisted y cryptography, validar AWX Operator y realizar pruebas integradas. No publicar ni promover a prd.
+
+## Candidato setuptools 82.0.0 — dependencias vendorizadas (2026-10-13)
+- Investigación externa: documentación oficial de setuptools anuncia actualización de vendorizados desde 80.10.x; referencia pública de mantenedores indica que 82.0.0 incorpora jaraco.context 6.1.0. En la imagen anterior, setuptools 80.9.0 contenía jaraco.context 5.3.0 y wheel 0.45.1 vendorizados.
+- Se cambió **solo en dev** setuptools 80.9.0 a 82.0.0 en requirements.in y requirements.txt; nuevo control de versión y rutas de dist-info vendorizadas en GitHub Actions.
+- Candidato SIN validar: riesgo de incompatibilidad por retirada de APIs históricas de setuptools, resolver dependencias, herramientas de build y plugins. Comprobar build, pip check, smoke crypto, Trivy y regresión funcional. Si falla, revertir a 80.9.0 y diagnosticar.
+- Último baseline APROBADO por CI: 0 CRITICAL, 6 HIGH (run 38507022009). El sistema operativo CentOS Stream continúa fuera de cobertura de Trivy. No modificar prd, no publicar ni desplegar.
