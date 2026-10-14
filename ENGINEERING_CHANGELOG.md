@@ -57,3 +57,8 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Candidatos de prueba en `requirements/requirements.txt`: dynaconf 3.2.13, msgpack 1.2.1, pyasn1 0.6.4, azure-core 1.38.0, jaraco-context 6.1.0, urllib3 2.8.0.
 - Cambios SIN validar todavía: resolver dependencias, compilación, pruebas funcionales/API y Trivy posterior. No tocar `prd` ni publicar la imagen.
 - Pendientes de análisis de compatibilidad: cryptography (saltos mayores), protobuf, pyOpenSSL, Twisted (versión corregida reportada como release candidate); además cobertura OS CentOS Stream no admitida por Trivy.
+
+## CI run 38500130796: fallo de validación del intérprete Python
+- GitHub Actions: build SUCCESS; `pip check` inicial SUCCESS; validación de versiones FAILED; Trivy SKIPPED y sin artifact.
+- Error observado: `PackageNotFoundError: No package metadata was found for PyJWT`, porque el workflow usaba el Python del sistema (`python3.12`) y las dependencias AWX se instalan en `/var/lib/awx/venv/awx`.
+- Corrección: ejecutar `pip check` y validación de versiones usando `/var/lib/awx/venv/awx/bin/python` dentro de la imagen. Validación aún pendiente de nueva ejecución. `prd` sin cambios.
