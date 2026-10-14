@@ -75,3 +75,11 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Modificados en rama `dev`: `requirements/requirements.in`, `requirements/requirements.txt` y verificación de versiones en `.github/workflows/awx-build.yml`.
 - **Estado: no validado**. El nuevo build debe pasar dependencias, `pip check`, versiones efectivas, Trivy y pruebas funcionales. No inferir que ya se resolvieron las CVE.
 - Quedan en análisis `cryptography`, `Twisted`, y copias antiguas de `jaraco.context`/`wheel`; Trivy sigue sin cubrir OS CentOS Stream. No promover a `prd` ni publicar.
+
+## CI AWX 38503644183 — validación protobuf y pyOpenSSL (2026-10-13)
+- Build, `pip check`, comprobación de versiones, Trivy y artefacto: **SUCCESS**.
+- Artefacto `awx-trivy-report`, ID **11867775621**: **0 CRITICAL, 7 HIGH**. Informe JSON descargado y analizado.
+- Restantes: Twisted 25.5.0 CVE-2026-42304 (fix indicado 26.4.0rc2); cryptography 46.0.3 CVE-2026-26007 (46.0.5), CVE-2026-69247 (50.0.0), CVE-2026-69249 (49.0.0), GHSA-537c-gmf6-5ccf (48.0.1); jaraco.context 5.3.0 CVE-2026-23949 (6.1.0); wheel 0.45.1 CVE-2026-24049 (0.46.2).
+- `jaraco.context` 5.3.0 y `wheel` 0.45.1 coexisten con versiones corregidas declaradas por el lock en otros entornos/capas; identificar ubicaciones reales antes de intervenir.
+- WARNING persistente Trivy: `Unsupported os family=centos-stream`. Sin evaluación completa de vulnerabilidades OS.
+- Pendiente: priorizar actualización compatible de cryptography; mapear instalaciones antiguas y evaluar pruebas de autenticación/función. **No publicar ni promover a `prd`.**
