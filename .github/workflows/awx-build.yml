@@ -34,7 +34,7 @@ jobs:
           docker run --rm --entrypoint /bin/bash awx-dev:ci -lc '/var/lib/awx/venv/awx/bin/python -c "import importlib.metadata as m; targets={\"PyJWT\":\"2.14.0\",\"dynaconf\":\"3.2.13\",\"msgpack\":\"1.2.1\",\"pyasn1\":\"0.6.4\",\"azure-core\":\"1.38.0\",\"jaraco.context\":\"6.1.0\",\"urllib3\":\"2.8.0\",\"protobuf\":\"6.33.5\",\"pyOpenSSL\":\"26.0.0\",\"cryptography\":\"46.0.5\"}; [(print(k, m.version(k)), (_ for _ in ()).throw(RuntimeError(k)) if m.version(k)!=v else None) for k,v in targets.items()] "'
       - name: Verify TLS and signature primitives in AWX Python environment
         run: |
-          docker run --rm --entrypoint /bin/bash awx-dev:ci -lc '/var/lib/awx/venv/awx/bin/python -c "import ssl, OpenSSL, cryptography; from cryptography.hazmat.primitives.asymmetric import ed25519; from cryptography import x509; key=ed25519.Ed25519PrivateKey.generate(); message=b\x27awx-ci-signature-test\x27; key.public_key().verify(key.sign(message),message); print(\x27TLS, X509 import and Ed25519 signature smoke checks OK\x27)"'
+          docker run --rm --entrypoint /var/lib/awx/venv/awx/bin/python awx-dev:ci -c 'import ssl, OpenSSL, cryptography; from cryptography.hazmat.primitives.asymmetric import ed25519; from cryptography import x509; key=ed25519.Ed25519PrivateKey.generate(); message=b"awx-ci-signature-test"; key.public_key().verify(key.sign(message), message); print("TLS, X509 imports and Ed25519 check OK")'
       - name: Record build image digest
         run: docker image inspect awx-dev:ci --format '{{.Id}}'
 
