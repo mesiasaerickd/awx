@@ -354,7 +354,7 @@ propcache==0.4.1
     # via
     #   aiohttp
     #   yarl
-protobuf==6.32.1
+protobuf==6.33.5
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   googleapis-common-protos
@@ -393,7 +393,7 @@ pyjwt[crypto]==2.14.0
     #   twilio
 pynacl==1.6.0
     # via pygithub
-pyopenssl==25.3.0
+pyopenssl==26.0.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
