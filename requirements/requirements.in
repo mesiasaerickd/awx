@@ -49,7 +49,7 @@ psutil
 pyasn1>=0.6.2  # CVE-2026-2349
 pygerduty
 PyGithub
-pyopenssl
+pyopenssl>=26.0.0  # candidate remediation CVE-2026-27459
 pyparsing>3.0 # Upgraded to v3 and changed import patterns
 pyjwt[crypto]>=2.14.0  # CVE-2026-102268; validate upstream compatibility
 python-daemon
@@ -75,5 +75,5 @@ setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build
 django-flags>=5.0.13
 dispatcherd[pg-notify]  # tasking system, previously part of AWX code base
-protobuf>=4.25.8 # CVE-2025-4565
+protobuf>=6.33.5  # candidate remediation CVE-2026-0994
 idna>=3.10 # CVE-2024-3651
