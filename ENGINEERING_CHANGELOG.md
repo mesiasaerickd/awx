@@ -147,3 +147,12 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Se actualizó el lock de Python, límites de requirements.in y verificación de versiones efectivas en CI. Se mantienen pip check, smoke TLS/X509/Ed25519, diagnóstico de paquetes y escaneo Trivy.
 - ESTADO: no validado, sujeto a resultado de GitHub Actions. Si hay fallo de resolución o incompatibilidad, identificar dependencia bloqueante y revertir candidato, no ignorar pip. La ausencia de HIGH/CRITICAL en este escaneo no constituye garantía de seguridad o funcionalidad.
 - Imprescindible posteriormente: pruebas de autenticación MSAL/OAuth, certificados, API, ejecución de jobs, integración Operator+EE y evaluación OS CentOS Stream. Sin publicar GHCR ni modificar prd o Kubernetes.
+
+## Validación CI 38508538749 — cero hallazgos HIGH/CRITICAL (2026-10-13)
+- GitHub Actions `build` **SUCCESS**, job ID `115672177839`.
+- Comprobaciones aprobadas: build Docker, `pip check`, versiones instaladas, smoke test TLS/X.509/Ed25519, setuptools vendorizado, inventario de paquetes y Trivy 0.75.0.
+- Dependencias observadas: MSAL 1.39.0, cryptography 50.0.0, pyOpenSSL 26.4.0 y Twisted 26.4.0.
+- Trivy informó **CRITICAL=0, HIGH=0**; artifact `awx-trivy-report` ID **11868827579**, inventory ID **11868284954**.
+- LIMITACIÓN: `WARN Unsupported os family=centos-stream` — Trivy no realizó análisis completo de vulnerabilidades de paquetes OS. La ausencia de hallazgos Python no equivale a seguridad de producción.
+- Puertas siguientes antes de publicar o promover: análisis OS complementario, pruebas reales de login/autenticación, API, migraciones PostgreSQL, AWX Operator, execution environments y ejecución de jobs; conservar rollback.
+- Sin publicación GHCR ni cambios en `prd` o Kubernetes.
