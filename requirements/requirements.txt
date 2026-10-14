@@ -50,7 +50,7 @@ automat==25.4.16
     # via
     #   -r /awx_devel/requirements/requirements_git.txt
     #   awx-plugins-core
-azure-core==1.35.1
+azure-core==1.38.0
     # via
     #   azure-identity
     #   azure-keyvault-certificates
@@ -168,7 +168,7 @@ drf-spectacular==0.29.0
     # via -r /awx_devel/requirements/requirements.in
 durationpy==0.10
     # via kubernetes
-dynaconf==3.2.12
+dynaconf==3.2.13
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-ansible-base
@@ -223,7 +223,7 @@ isodate==0.7.2
     #   msrest
 jaraco-collections==5.2.1
     # via irc
-jaraco-context==6.0.1
+jaraco-context==6.1.0
     # via jaraco-text
 jaraco-functools==4.3.0
     # via
@@ -278,7 +278,7 @@ msal==1.34.0
     #   msal-extensions
 msal-extensions==1.3.1
     # via azure-identity
-msgpack==1.1.1
+msgpack==1.2.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels-redis
@@ -367,7 +367,7 @@ psycopg==3.2.10
     #   dispatcherd
 ptyprocess==0.7.0
     # via pexpect
-pyasn1==0.6.2
+pyasn1==0.6.4
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   pyasn1-modules
@@ -525,7 +525,7 @@ typing-extensions==4.15.0
     #   twisted
 uritemplate==4.2.0
     # via drf-spectacular
-urllib3==2.6.3
+urllib3==2.8.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   botocore
