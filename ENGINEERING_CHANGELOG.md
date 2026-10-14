@@ -112,3 +112,9 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - Reversión de versiones candidatas a último conjunto que compiló: `cryptography==46.0.5`, `pyOpenSSL==26.0.0`, y restricciones equivalentes en `requirements.in`; verificación CI adaptada. Se conservaron las pruebas TLS y de firmas en el workflow para validar en la siguiente ejecución.
 - Riesgo residual: CVE de cryptography que requieren ramas 48/49/50 no resueltas. Evaluar actualización de MSAL y resto de dependencias de autenticación **separadamente**, con pruebas de regresión. No usar `--no-deps` ni ignorar el resolver.
 - Último estado Trivy confirmado sigue siendo 0 CRITICAL / 6 HIGH (run 38504713333), con advertencia `Unsupported os family=centos-stream`. `prd` sin modificaciones.
+
+## CI 38506467521 — fallo del smoke test por quoting
+- Build SUCCESS, pip check SUCCESS y control de versiones SUCCESS después del rollback a cryptography 46.0.5 / pyOpenSSL 26.0.0.
+- Smoke test TLS/Ed25519 FAILED con `SyntaxError: unexpected character after line continuation character`: escape `\\x27` en la invocación de `python -c`, no fallo demostrado de cryptography.
+- Corregido el comando usando el intérprete del virtualenv como entrypoint de Docker y comillas seguras para la cadena de prueba. Aún requiere nueva ejecución para validar.
+- Trivy SKIPPED en este run, por tanto último escaneo válido: 0 CRITICAL y 6 HIGH. Sin cambio a prd ni publicación de imágenes.
