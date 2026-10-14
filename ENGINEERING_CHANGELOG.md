@@ -69,3 +69,9 @@ Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE 
 - CVE pendientes: Twisted 25.5.0 / CVE-2026-42304 (Trivy indica 26.4.0rc2: pre-release; no actualizar sin probar); cryptography 46.0.3 / CVE-2026-26007 (46.0.5), CVE-2026-69247 (50.0.0), CVE-2026-69249 (49.0.0), GHSA-537c-gmf6-5ccf (48.0.1); jaraco.context 5.3.0 / CVE-2026-23949 (6.1.0) **en otra ubicación pese al pin 6.1.0**; protobuf 6.32.1 / CVE-2026-0994 (6.33.5); pyOpenSSL 25.3.0 / CVE-2026-27459 (26.0.0); wheel 0.45.1 / CVE-2026-24049 (0.46.2) **en otra ubicación pese al pin 0.46.3**.
 - Próximos pasos: localizar las capas/intérpretes afectados en el build multietapa, evaluar compatibilidad de actualizaciones mayores, verificar pruebas funcionales y de autenticación antes de publicar; reportar cobertura OS faltante (`centos-stream`).
 - No promover a `prd` ni publicar aún.
+
+## Remediación candidata adicional — 2026-10-13
+- Tras el run 38501718152 (0 CRITICAL, 9 HIGH), se proponen las actualizaciones **protobuf 6.32.1 → 6.33.5** (CVE-2026-0994) y **pyOpenSSL 25.3.0 → 26.0.0** (CVE-2026-27459).
+- Modificados en rama `dev`: `requirements/requirements.in`, `requirements/requirements.txt` y verificación de versiones en `.github/workflows/awx-build.yml`.
+- **Estado: no validado**. El nuevo build debe pasar dependencias, `pip check`, versiones efectivas, Trivy y pruebas funcionales. No inferir que ya se resolvieron las CVE.
+- Quedan en análisis `cryptography`, `Twisted`, y copias antiguas de `jaraco.context`/`wheel`; Trivy sigue sin cubrir OS CentOS Stream. No promover a `prd` ni publicar.
