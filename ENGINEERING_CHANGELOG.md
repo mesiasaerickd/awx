@@ -35,3 +35,10 @@ Se verificó `tools/ansible/roles/dockerfile/templates/Dockerfile.j2`: usa CentO
 Run 38493345027: build y Trivy completados. CRITICAL=1, HIGH=25. Artifact `awx-trivy-report`, ID 11862846497. Referencia original AWX 24.6.1: CRITICAL=6, HIGH=76; no equivale a validación CVE por CVE. Trivy advierte que CentOS Stream 9 no está cubierto como sistema operativo.
 
 Decisión: mantener `prd` sin cambios; no publicar a GHCR hasta identificar CVE remanentes, comprobar cobertura OS y validar la integración Kubernetes. La ejecución de Trivy exitosa significa que el escáner pudo correr, no que no existan vulnerabilidades.
+
+## Corrección candidata — PyJWT (2026-10-13)
+- Fuente: artifact `awx-trivy-report` de GitHub Actions run `38493345027`: CVE-2026-102268 CRITICAL, PyJWT 2.10.1, fixed version reportada 2.14.0. Otros hallazgos: 25 HIGH.
+- Cambio en `dev`: requisito explícito `pyjwt[crypto]>=2.14.0` en `requirements/requirements.in` y pin `pyjwt[crypto]==2.14.0` en `requirements/requirements.txt`.
+- Advertencia: esta actualización es una **candidata**, todavía no se ha comprobado disponibilidad del paquete, resolución del resto de dependencias, build, pruebas de JWT/autenticación, compatibilidad de AWX, ni escaneo de la nueva imagen.
+- Aceptación: compilar correctamente en GitHub Actions, verificar la versión efectiva de PyJWT, comprobar que desaparece la CVE, ejecutar pruebas de autenticación/API y someter cambio a PR; prohibida la promoción a `prd` hasta entonces.
+- La base de CentOS Stream 9 sigue sin cobertura de CVE del sistema operativo en Trivy, por lo que un escaneo limpio en Python no constituye aprobación de seguridad.
