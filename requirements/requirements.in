@@ -51,6 +51,7 @@ pygerduty
 PyGithub
 pyopenssl
 pyparsing>3.0 # Upgraded to v3 and changed import patterns
+pyjwt[crypto]>=2.14.0  # CVE-2026-102268; validate upstream compatibility
 python-daemon
 python-dsv-sdk>=1.0.4
 python-tss-sdk>=1.2.1
