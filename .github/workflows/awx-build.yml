@@ -31,7 +31,7 @@ jobs:
           docker run --rm --entrypoint /bin/bash awx-dev:ci -lc '/var/lib/awx/venv/awx/bin/python -m pip check'
       - name: Verify remediation candidate versions
         run: |
-          docker run --rm --entrypoint /bin/bash awx-dev:ci -lc '/var/lib/awx/venv/awx/bin/python -c "import importlib.metadata as m; targets={\"PyJWT\":\"2.14.0\",\"dynaconf\":\"3.2.13\",\"msgpack\":\"1.2.1\",\"pyasn1\":\"0.6.4\",\"azure-core\":\"1.38.0\",\"jaraco.context\":\"6.1.0\",\"urllib3\":\"2.8.0\"}; [(print(k, m.version(k)), (_ for _ in ()).throw(RuntimeError(k)) if m.version(k)!=v else None) for k,v in targets.items()] "'
+          docker run --rm --entrypoint /bin/bash awx-dev:ci -lc '/var/lib/awx/venv/awx/bin/python -c "import importlib.metadata as m; targets={\"PyJWT\":\"2.14.0\",\"dynaconf\":\"3.2.13\",\"msgpack\":\"1.2.1\",\"pyasn1\":\"0.6.4\",\"azure-core\":\"1.38.0\",\"jaraco.context\":\"6.1.0\",\"urllib3\":\"2.8.0\",\"protobuf\":\"6.33.5\",\"pyOpenSSL\":\"26.0.0\"}; [(print(k, m.version(k)), (_ for _ in ()).throw(RuntimeError(k)) if m.version(k)!=v else None) for k,v in targets.items()] "'
       - name: Record build image digest
         run: docker image inspect awx-dev:ci --format '{{.Id}}'
 
